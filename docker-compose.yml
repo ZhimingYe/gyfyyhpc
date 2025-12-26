@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  sshworkspace:
+    image: gyfyyxwkhpc/sshworkspace:latest
+    pull_policy: if_not_present
+    container_name: sshworkspace-{{ INSTANCE_NAME }}
+    ports:
+      - "{{ SSH_PORT }}:22"
+      - "{{ RSTUDIO_PORT }}:8787"
+    environment:
+      - ROOT=true
+      - PASSWORD={{ PASSWORD }}
+    volumes:
+      - /mnt/nas/{{ MOUNT_SOURCE }}:/home/rstudio/PersonalData
+    deploy:
+      resources:
+        limits:
+          memory: {{ MEMORY_LIMIT }}
+          cpus: '{{ CPU_LIMIT }}'
+        reservations:
+          memory: {{ MEMORY_RESERVE }}
+    restart: unless-stopped
